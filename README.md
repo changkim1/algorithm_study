@@ -1,4 +1,4 @@
-# 서울 21반 Algorithm_study
+# SSAFY 9기 서울 21반 Algorithm_study
 
 ## 멤버
 

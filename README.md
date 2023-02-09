@@ -5,7 +5,7 @@
 정성남
 [김창희](https://github.com/changkim1)
 [배정원](https://github.com/Baejw0111)
-최형규
+[최형규](https://github.com/ChoiHyeongGyu)
 
 ## 주차별 학습 문제
 

@@ -11,7 +11,7 @@
 
 |주차|문제|
 |:---:|:---:|
-|1주차|[프로세서 연결하기](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV4suNtaXFEDFAUf&&), [테트로미노](https://www.acmicpc.net/problem/14500), [연산자 끼워넣기](https://www.acmicpc.net/problem/14888), [스타트와 링크](https://www.acmicpc.net/problem/14889), [파이프 옮기기1](https://www.acmicpc.net/problem/17070)|
+|[1주차](https://github.com/changkim1/algorithm_study/tree/main/week1)|[프로세서 연결하기](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV4suNtaXFEDFAUf&&), [테트로미노](https://www.acmicpc.net/problem/14500), [연산자 끼워넣기](https://www.acmicpc.net/problem/14888), [스타트와 링크](https://www.acmicpc.net/problem/14889), [파이프 옮기기1](https://www.acmicpc.net/problem/17070)|
 |2주차||
 |3주차||
 |4주차||

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algu>
 using namespace std;
 int N;
 int arr[12][12];

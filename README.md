@@ -2,7 +2,7 @@
 
 ## 멤버
 
-정성남
+[정성남](https://github.com/jseongnam)
 [김창희](https://github.com/changkim1)
 [배정원](https://github.com/Baejw0111)
 [최형규](https://github.com/ChoiHyeongGyu)

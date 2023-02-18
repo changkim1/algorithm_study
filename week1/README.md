@@ -12,6 +12,7 @@
 
 ||1|2|3|4|5|
 |:---:|:---:|:---:|:---:|:---:|:---:|
+| 문제 |[프로세서 연결하기](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV4suNtaXFEDFAUf&&)|[테트로미노](https://www.acmicpc.net/problem/14500)|[연산자 끼워넣기](https://www.acmicpc.net/problem/14888)|[스타트와 링크](https://www.acmicpc.net/problem/14889)|[파이프 옮기기1](https://www.acmicpc.net/problem/17070)|
 |김창희| x | x | O | O | O |
 |배정원| O | O | O | O | O |
 |정성남| x | x | O | O | O |

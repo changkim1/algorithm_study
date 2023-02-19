@@ -1,0 +1,281 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/* 주어진 조건
+BC의 위치, 충전범위, 성능이 주어짐
+충전 범위 겹치면 둘 중 하나를 선택해야함
+한 BC에 두 명의 사용자가 접속하면 성능이 분배됨
+총 이동시간 m
+BC의 개수 a
+m시간 동안의 이동 정보
+ */
+
+/* 구하는 것
+모든 사용자가 충전한 양의 합의 최대값
+ */
+
+/* 아이디어
+BFS로 각 시간의 상태를 우선순위 큐에 넣는다
+큐에는 (A의 상태,B의 상태,시간)이 들어간다
+여기서 사용자의 상태는 좌표값과 현재 충전량이 들어가야 한다.
+매번 큐에서 원소를 뽑을 때마다 A,B와 BC들 간의 거리를 구해서
+경우의 수를 고려해야 한다.
+또한 BC의 정보를 담은 벡터도 따로 두어야 할 것이다.
+사용자는 지도의 양 끝에서 출발함
+우선순위 큐는 각 사용자의 충전량의 총합이 큰 게 먼저 온다.
+시점이 m에 다다르면 BFS 종료
+ */
+
+// ------------------변수------------------
+
+// 사용자의 상태
+struct User{
+    // y좌표
+    int y;
+    // x좌표
+    int x;
+    //현재까지의 충전량
+    int sum;
+};
+
+// BC의 정보
+struct BC{
+    // y좌표
+    int y;
+    // x좌표
+    int x;
+    //충전 범위
+    int c;
+    //성능
+    int p;
+};
+
+//시점 t에서의 상태
+struct Status{
+    User statA;
+    User statB;
+    int t;
+
+    bool operator < (Status next) const{
+        return statA.sum+statB.sum < next.statA.sum+next.statB.sum;
+        return false;
+    }
+};
+
+//총 이동시간
+int m;
+//BC의 개수
+int a;
+// 방향배열(정지,상우하좌)
+pair<int, int> dir[5] = {{0,0},{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+//BC들의 정보를 담을 벡터
+vector<BC> bc_list;
+//A,B의 이동정보
+vector<int> A_move,B_move;
+
+// ------------------함수------------------
+
+// 입력
+void input();
+//특정 BC(num)와의 거리
+int dist(int num,int y,int x);
+//사용자가 특정 BC(num)의 범위 내에 있는 지 여부를 반환
+bool inside(int num,int y,int x);
+void BFS();
+void solve();
+
+// ------------------main------------------
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    int T;
+    cin >> T;
+
+    for (int i = 1; i <= T; ++i)
+    {
+        cout << '#' << i << ' ';
+        solve();
+    }
+    return 0;
+}
+
+//------------------함수 정의------------------
+
+void input()
+{
+    // 벡터 비우기
+    bc_list.clear();
+    A_move.clear();
+    B_move.clear();
+
+    cin>>m>>a;
+
+    // 벡터 크기 초기화
+    bc_list.resize(a);
+    A_move.resize(m);
+    B_move.resize(m);
+
+    //A 이동 경로
+    for(int i=0;i<m;++i){
+        cin>>A_move[i];
+    }
+
+    //B 이동 경로
+    for(int i=0;i<m;++i){
+        cin>>B_move[i];
+    }
+
+    //BC 정보
+    for(int i=0;i<a;++i){
+        int y;
+        int x;
+        int c;
+        int p;
+
+        cin>>x>>y>>c>>p;
+
+        bc_list[i]={y,x,c,p};
+    }
+}
+
+int dist(int num,int y,int x){
+    return abs(bc_list[num].y-y)+abs(bc_list[num].x-x);
+}
+
+bool inside(int num,int y,int x){
+    return dist(num,y,x)<=bc_list[num].c;
+    return false;
+}
+
+void BFS(){
+    //시점 별 상태를 담을 큐(A의 상태,B의 상태,시점)
+    priority_queue<Status> pq;
+    pq.push({{1,1,0},{10,10,0},-1});
+
+    while(!pq.empty()){
+        //A의 상태
+        User A=pq.top().statA;
+        //B의 상태
+        User B=pq.top().statB;
+        //시점
+        int t=pq.top().t;
+        pq.pop();
+
+        // cout<<'\n';
+        // cout<<"A:"<<'('<<A.y<<','<<A.x<<')'<<'\n';
+        // cout<<"B:"<<'('<<B.y<<','<<B.x<<')'<<'\n';
+        // cout<<A.sum<<' '<<B.sum<<' '<<t<<'\n';
+
+        // 현재 원소의 시점이 m일 시
+        // 충전량 총합이 최대인 경우일 것이므로 함수 종료
+        if(t==m){
+            cout<<A.sum+B.sum<<'\n';
+            return;
+        }
+
+        //A의 다음 시점의 상태
+        User nA;
+        //B의 다음 시점의 상태
+        User nB;
+        if(t==-1){
+            nA=A;
+            nB=B;
+        }
+        else{
+            nA={A.y+dir[A_move[t]].first,
+                A.x+dir[A_move[t]].second,
+                A.sum};
+
+            nB={B.y+dir[B_move[t]].first,
+                B.x+dir[B_move[t]].second,
+                B.sum};
+        }
+        
+        //각 BC의 범위에 A가 들어가는 지 여부
+        vector<int> inA(a);
+        //각 BC의 범위에 B가 들어가는 지 여부
+        vector<int> inB(a);
+
+        //사용자가 BC 범위 밖에 있으면 1
+        int sA=1,sB=1;
+
+        for(int i=0;i<a;++i){
+            if(inside(i,nA.y,nA.x)){
+                sA=0;
+                inA[i]=1;
+            }
+            if(inside(i,nB.y,nB.x)){
+                sB=0;
+                inB[i]=1;
+            }
+        }
+
+        // cout<<"A inside: ";
+        // for(int i=0;i<a;++i){
+        //     cout<<inA[i]<<' ';
+        // }
+        // cout<<'\n';
+
+        // cout<<"B inside: ";
+        // for(int i=0;i<a;++i){
+        //     cout<<inB[i]<<' ';
+        // }
+        // cout<<'\n';
+
+        // 모든 가능한 경우의 수들을 적용
+        if(sA){
+            if(sB){
+                pq.push({nA,nB,t+1});
+            }
+            else{
+                for(int i=0;i<a;++i){
+                    if(!inB[i]) continue;
+
+                    User tmpB=nB;
+                    tmpB.sum+=bc_list[i].p;
+                    pq.push({nA,tmpB,t+1});
+                }
+            }
+        }
+        else{
+            for(int i=0;i<a;++i){
+                if(!inA[i]) continue;
+
+                User tmpA=nA;
+
+                if(sB){
+                    tmpA.sum+=bc_list[i].p;
+                    pq.push({tmpA,nB,t+1});
+                }
+                else{
+                    for(int j=0;j<a;++j){
+                        if(!inB[j]) continue;
+
+                        User tmpB=nB;
+
+                        //같은 BC일 경우 성능 분배
+                        if(i==j){
+                            tmpA.sum+=bc_list[i].p/2;
+                            tmpB.sum+=bc_list[j].p/2;
+                        }
+                        else{
+                            tmpA.sum+=bc_list[i].p;
+                            tmpB.sum+=bc_list[j].p;
+                        }
+                        pq.push({tmpA,tmpB,t+1});
+                    }
+                }
+            }
+        }
+    }
+}
+
+void solve()
+{
+    input();
+    BFS();
+}

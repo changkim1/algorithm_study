@@ -14,7 +14,7 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 문제 |[등산로 조성](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5PoOKKAPIDFAUq)|[수영장](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5PpFQaAQMDFAUq)|[탈주범 검거](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5PpLlKAQ4DFAUq)|[벌꿀 채취](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5V4A46AdIDFAWu)|[미생물 격리](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV597vbqAH0DFAVl)|[숫자 만들기](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWIeRZV6kBUDFAVH)|[요리사](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWIeUtVakTMDFAVH)|[무선 충전](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRDL1aeugDFAUo)|
 |김창희|  | O |  | O |  | O | O | O |
-|배정원| O |  | O | O | O | | | |
+|배정원| O | O | O | O | O | | | |
 |정성남| O |  | O | O |  | O | O | |
 |최형규|  | O |  | O | O | | O | O |
 ---
@@ -29,7 +29,7 @@
 ### 수영장
 ||김창희|배정원|정성남|최형규|
 |:---:|:---:|:---:|:---:|:---:|
-|실행 시간| ms | ms | ms | 18ms | ms |
+|실행 시간| ms | 13ms | ms | 18ms | ms |
 
 ### 탈주범 검거
 ||김창희|배정원|정성남|최형규|

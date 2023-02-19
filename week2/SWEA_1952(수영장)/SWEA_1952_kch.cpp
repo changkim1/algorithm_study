@@ -53,7 +53,7 @@ int main(void)
 		solve(1, 0);
 		// printf("sum = %d\n", ans);
 		ans = min(ans, fee[3]); // 1일권, 한달권, 3달권을 사용했던 것들 중에 가장 싼 값과 1년치 이용권을 비교해서 갱신
-		printf("#%d %d\n", a + 1, ans); // 최솟값 출력ㄴ
+		printf("#%d %d\n", a + 1, ans); // 최솟값 출력
 	}
 	
 }

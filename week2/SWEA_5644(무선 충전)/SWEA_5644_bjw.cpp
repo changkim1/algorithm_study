@@ -28,59 +28,54 @@ BFS로 각 시간의 상태를 우선순위 큐에 넣는다
 
 // ------------------변수------------------
 
-// 사용자의 상태
-struct User{
-    // y좌표
-    int y;
-    // x좌표
-    int x;
-    //현재까지의 충전량
-    int sum;
+struct User // 사용자의 상태
+{
+    int y;   // y좌표
+    int x;   // x좌표
+    int sum; // 현재까지의 충전량
 };
 
 // BC의 정보
-struct BC{
-    // y좌표
-    int y;
-    // x좌표
-    int x;
-    //충전 범위
-    int c;
-    //성능
-    int p;
+struct BC
+{
+    int y; // y좌표
+    int x; // x좌표
+    int c; // 충전 범위
+    int p; // 성능
 };
 
-//시점 t에서의 상태
-struct Status{
-    User statA;
-    User statB;
-    int t;
+struct Status // 시점 t에서의 상태
+{
+    User statA; // 사용자 A의 상태
+    User statB; // 사용자 B의 상태
+    int t;      // 시점
 
-    bool operator < (Status next) const{
-        return statA.sum+statB.sum < next.statA.sum+next.statB.sum;
+    bool operator<(Status next) const
+    {
+        return statA.sum + statB.sum < next.statA.sum + next.statB.sum;
         return false;
     }
 };
 
-//총 이동시간
-int m;
-//BC의 개수
-int a;
-// 방향배열(정지,상우하좌)
-pair<int, int> dir[5] = {{0,0},{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-//BC들의 정보를 담을 벡터
-vector<BC> bc_list;
-//A,B의 이동정보
-vector<int> A_move,B_move;
+int m;                                                              // 총 이동시간
+int a;                                                              // BC의 개수
+pair<int, int> dir[5] = {{0, 0}, {-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // 방향배열(정지,상우하좌)
+vector<BC> bc_list;                                                 // BC들의 정보를 담을 벡터
+vector<int> A_move, B_move;                                         // A,B의 이동정보
+priority_queue<Status> pq;                                          // 시점 별 상태를 담을 큐(A의 상태,B의 상태,시점)
 
 // ------------------함수------------------
 
+// 초기화
+void init();
 // 입력
 void input();
-//특정 BC(num)와의 거리
-int dist(int num,int y,int x);
-//사용자가 특정 BC(num)의 범위 내에 있는 지 여부를 반환
-bool inside(int num,int y,int x);
+// 특정 BC(num)와의 거리
+int dist(int num, int y, int x);
+// 사용자가 특정 BC(num)의 범위 내에 있는 지 여부를 반환
+bool inside(int num, int y, int x);
+// 다음 시점에 올수 있는 모든 상황 계산
+void nextSituation(Status nStat);
 void BFS();
 void solve();
 
@@ -105,64 +100,177 @@ int main()
 
 //------------------함수 정의------------------
 
-void input()
+void init()
 {
     // 벡터 비우기
     bc_list.clear();
     A_move.clear();
     B_move.clear();
 
-    cin>>m>>a;
-
     // 벡터 크기 초기화
     bc_list.resize(a);
     A_move.resize(m);
     B_move.resize(m);
 
-    //A 이동 경로
-    for(int i=0;i<m;++i){
-        cin>>A_move[i];
+    // 큐 비우기
+    while (!pq.empty())
+    {
+        pq.pop();
+    }
+}
+
+void input()
+{
+    cin >> m >> a;
+
+    init();
+
+    // A 이동 경로
+    for (int i = 0; i < m; ++i)
+    {
+        cin >> A_move[i];
     }
 
-    //B 이동 경로
-    for(int i=0;i<m;++i){
-        cin>>B_move[i];
+    // B 이동 경로
+    for (int i = 0; i < m; ++i)
+    {
+        cin >> B_move[i];
     }
 
-    //BC 정보
-    for(int i=0;i<a;++i){
+    // BC 정보
+    for (int i = 0; i < a; ++i)
+    {
         int y;
         int x;
         int c;
         int p;
 
-        cin>>x>>y>>c>>p;
+        cin >> x >> y >> c >> p;
 
-        bc_list[i]={y,x,c,p};
+        bc_list[i] = {y, x, c, p};
     }
 }
 
-int dist(int num,int y,int x){
-    return abs(bc_list[num].y-y)+abs(bc_list[num].x-x);
+int dist(int num, int y, int x)
+{
+    return abs(bc_list[num].y - y) + abs(bc_list[num].x - x);
 }
 
-bool inside(int num,int y,int x){
-    return dist(num,y,x)<=bc_list[num].c;
+bool inside(int num, int y, int x)
+{
+    return dist(num, y, x) <= bc_list[num].c;
     return false;
 }
 
-void BFS(){
-    //시점 별 상태를 담을 큐(A의 상태,B의 상태,시점)
-    priority_queue<Status> pq;
-    pq.push({{1,1,0},{10,10,0},-1});
+void nextSituation(Status nStat)
+{
+    User nA = nStat.statA; // A의 다음 시점의 상태
+    User nB = nStat.statB; // B의 다음 시점의 상태
+    int t = nStat.t + 1;   // 다음 시점
 
-    while(!pq.empty()){
-        //A의 상태
-        User A=pq.top().statA;
-        //B의 상태
-        User B=pq.top().statB;
-        //시점
-        int t=pq.top().t;
+    vector<int> inA(a); // 각 BC의 범위에 A가 들어가는 지 여부 저장
+    vector<int> inB(a); // 각 BC의 범위에 B가 들어가는 지 여부 저장
+
+    int sA = 1; // A가 어떤 BC 범위 안에도 있지 않으면 1
+    int sB = 1; // B가 어떤 BC 범위 안에도 있지 않으면 1
+
+    for (int i = 0; i < a; ++i)
+    {
+        if (inside(i, nA.y, nA.x))
+        {
+            sA = 0;
+            inA[i] = 1;
+        }
+        if (inside(i, nB.y, nB.x))
+        {
+            sB = 0;
+            inB[i] = 1;
+        }
+    }
+
+    // cout<<"A inside: ";
+    // for(int i=0;i<a;++i){
+    //     cout<<inA[i]<<' ';
+    // }
+    // cout<<'\n';
+
+    // cout<<"B inside: ";
+    // for(int i=0;i<a;++i){
+    //     cout<<inB[i]<<' ';
+    // }
+    // cout<<'\n';
+
+    // 모든 가능한 경우의 수들을 적용
+    if (sA)
+    {
+        if (sB)
+        {
+            pq.push({nA, nB, t});
+        }
+        else
+        {
+            for (int i = 0; i < a; ++i)
+            {
+                if (!inB[i])
+                    continue;
+
+                User tmpB = nB;
+                tmpB.sum += bc_list[i].p;
+                pq.push({nA, tmpB, t});
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < a; ++i)
+        {
+            if (!inA[i])
+                continue;
+
+            User tmpA = nA;
+
+            if (sB)
+            {
+                tmpA.sum += bc_list[i].p;
+                pq.push({tmpA, nB, t});
+            }
+            else
+            {
+                for (int j = 0; j < a; ++j)
+                {
+                    if (!inB[j])
+                        continue;
+
+                    User tmpB = nB;
+
+                    // 같은 BC일 경우 성능 분배
+                    if (i == j)
+                    {
+                        tmpA.sum += bc_list[i].p / 2;
+                        tmpB.sum += bc_list[j].p / 2;
+                    }
+                    else
+                    {
+                        tmpA.sum += bc_list[i].p;
+                        tmpB.sum += bc_list[j].p;
+                    }
+                    pq.push({tmpA, tmpB, t});
+                }
+            }
+        }
+    }
+}
+
+void BFS()
+{
+    pq.push({{1, 1, 0}, {10, 10, 0}, -1});
+
+    while (!pq.empty())
+    {
+        User A = pq.top().statA; // A의 상태
+        User B = pq.top().statB; // B의 상태
+        int t = pq.top().t;      // 시점
+
         pq.pop();
 
         // cout<<'\n';
@@ -172,105 +280,31 @@ void BFS(){
 
         // 현재 원소의 시점이 m일 시
         // 충전량 총합이 최대인 경우일 것이므로 함수 종료
-        if(t==m){
-            cout<<A.sum+B.sum<<'\n';
+        if (t == m)
+        {
+            cout << A.sum + B.sum << '\n';
             return;
         }
 
-        //A의 다음 시점의 상태
-        User nA;
-        //B의 다음 시점의 상태
-        User nB;
-        if(t==-1){
-            nA=A;
-            nB=B;
+        User nA; // A의 다음 시점의 상태
+        User nB; // B의 다음 시점의 상태
+        if (t == -1)
+        {
+            nA = A;
+            nB = B;
         }
-        else{
-            nA={A.y+dir[A_move[t]].first,
-                A.x+dir[A_move[t]].second,
-                A.sum};
+        else
+        {
+            nA = {A.y + dir[A_move[t]].first,
+                  A.x + dir[A_move[t]].second,
+                  A.sum};
 
-            nB={B.y+dir[B_move[t]].first,
-                B.x+dir[B_move[t]].second,
-                B.sum};
-        }
-        
-        //각 BC의 범위에 A가 들어가는 지 여부
-        vector<int> inA(a);
-        //각 BC의 범위에 B가 들어가는 지 여부
-        vector<int> inB(a);
-
-        //사용자가 BC 범위 밖에 있으면 1
-        int sA=1,sB=1;
-
-        for(int i=0;i<a;++i){
-            if(inside(i,nA.y,nA.x)){
-                sA=0;
-                inA[i]=1;
-            }
-            if(inside(i,nB.y,nB.x)){
-                sB=0;
-                inB[i]=1;
-            }
+            nB = {B.y + dir[B_move[t]].first,
+                  B.x + dir[B_move[t]].second,
+                  B.sum};
         }
 
-        // cout<<"A inside: ";
-        // for(int i=0;i<a;++i){
-        //     cout<<inA[i]<<' ';
-        // }
-        // cout<<'\n';
-
-        // cout<<"B inside: ";
-        // for(int i=0;i<a;++i){
-        //     cout<<inB[i]<<' ';
-        // }
-        // cout<<'\n';
-
-        // 모든 가능한 경우의 수들을 적용
-        if(sA){
-            if(sB){
-                pq.push({nA,nB,t+1});
-            }
-            else{
-                for(int i=0;i<a;++i){
-                    if(!inB[i]) continue;
-
-                    User tmpB=nB;
-                    tmpB.sum+=bc_list[i].p;
-                    pq.push({nA,tmpB,t+1});
-                }
-            }
-        }
-        else{
-            for(int i=0;i<a;++i){
-                if(!inA[i]) continue;
-
-                User tmpA=nA;
-
-                if(sB){
-                    tmpA.sum+=bc_list[i].p;
-                    pq.push({tmpA,nB,t+1});
-                }
-                else{
-                    for(int j=0;j<a;++j){
-                        if(!inB[j]) continue;
-
-                        User tmpB=nB;
-
-                        //같은 BC일 경우 성능 분배
-                        if(i==j){
-                            tmpA.sum+=bc_list[i].p/2;
-                            tmpB.sum+=bc_list[j].p/2;
-                        }
-                        else{
-                            tmpA.sum+=bc_list[i].p;
-                            tmpB.sum+=bc_list[j].p;
-                        }
-                        pq.push({tmpA,tmpB,t+1});
-                    }
-                }
-            }
-        }
+        nextSituation({nA, nB, t});
     }
 }
 

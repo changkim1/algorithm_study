@@ -57,12 +57,16 @@ struct Status // 시점 t에서의 상태
     }
 };
 
-int m;                                                              // 총 이동시간
-int a;                                                              // BC의 개수
-pair<int, int> dir[5] = {{0, 0}, {-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // 방향배열(정지,상우하좌)
-vector<BC> bc_list;                                                 // BC들의 정보를 담을 벡터
-vector<int> A_move, B_move;                                         // A,B의 이동정보
-priority_queue<Status> pq;                                          // 시점 별 상태를 담을 큐(A의 상태,B의 상태,시점)
+int m; // 총 이동시간
+int a; // BC의 개수
+pair<int, int> dir[5] = {{0, 0},
+                         {-1, 0},
+                         {0, 1},
+                         {1, 0},
+                         {0, -1}}; // 방향배열(정지,상우하좌)
+vector<BC> bc_list;                // BC들의 정보를 담을 벡터
+vector<int> A_move, B_move;        // A,B의 이동정보
+priority_queue<Status> pq;         // 시점 별 상태를 담을 큐(A의 상태,B의 상태,시점)
 
 // ------------------함수------------------
 
@@ -188,17 +192,8 @@ void nextSituation(Status nStat)
         }
     }
 
-    // cout<<"A inside: ";
-    // for(int i=0;i<a;++i){
-    //     cout<<inA[i]<<' ';
-    // }
-    // cout<<'\n';
-
-    // cout<<"B inside: ";
-    // for(int i=0;i<a;++i){
-    //     cout<<inB[i]<<' ';
-    // }
-    // cout<<'\n';
+    // 아래 반복문 내에서 임시적으로 쓰일 상태 변수들
+    User tmpA = nA, tmpB = nB;
 
     // 모든 가능한 경우의 수들을 적용
     if (sA)
@@ -214,7 +209,7 @@ void nextSituation(Status nStat)
                 if (!inB[i])
                     continue;
 
-                User tmpB = nB;
+                tmpB = nB;
                 tmpB.sum += bc_list[i].p;
                 pq.push({nA, tmpB, t});
             }
@@ -227,7 +222,7 @@ void nextSituation(Status nStat)
             if (!inA[i])
                 continue;
 
-            User tmpA = nA;
+            tmpA = nA;
 
             if (sB)
             {
@@ -241,7 +236,8 @@ void nextSituation(Status nStat)
                     if (!inB[j])
                         continue;
 
-                    User tmpB = nB;
+                    tmpA = nA;
+                    tmpB = nB;
 
                     // 같은 BC일 경우 성능 분배
                     if (i == j)
@@ -272,11 +268,6 @@ void BFS()
         int t = pq.top().t;      // 시점
 
         pq.pop();
-
-        // cout<<'\n';
-        // cout<<"A:"<<'('<<A.y<<','<<A.x<<')'<<'\n';
-        // cout<<"B:"<<'('<<B.y<<','<<B.x<<')'<<'\n';
-        // cout<<A.sum<<' '<<B.sum<<' '<<t<<'\n';
 
         // 현재 원소의 시점이 m일 시
         // 충전량 총합이 최대인 경우일 것이므로 함수 종료

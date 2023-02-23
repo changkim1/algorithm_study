@@ -4,7 +4,7 @@ int N;//가로 세로 길이(원소의 수)
 int arr[16][16] = { 0 };
 int dat[16];
 int answer = 21e8;
-int num = 1;
+int num = 12;
 void dfs(int count,int start) {
 	if (count == N / 2)
 	{

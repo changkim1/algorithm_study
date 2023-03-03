@@ -14,7 +14,7 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 문제 |[점심 식사시간](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5-BEE6AK0DFAVl)|[차량 정비소](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV6c6bgaIuoDFAXy&categoryId=AV6c6bgaIuoDFAXy&categoryType=CODE&&&)|[특이한 자석](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWIeV9sKkcoDFAVH)|[줄기 세포 배양](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRJ8EKe48DFAUo)|[벽돌 깨기](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRQm6qfL0DFAUo&categoryId=AWXRQm6qfL0DFAUo&categoryType=CODE&problemTitle=5656&orderBy=FIRST_REG_DATETIME&selectCodeLang=ALL&select-1=&pageSize=10&pageIndex=1)|[활주로 건설](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWIeW7FakkUDFAVH)|
 |김창희|  | O | O | O |  |  |
-|배정원|  | O |  | O |  |  |
+|배정원|  | O |  | O | O |  |
 |정성남|  |  |  |  |  |  |
 |최형규| O |  | O | O |  |  |
 
@@ -45,7 +45,7 @@
 ### 벽돌 깨기
 ||김창희|배정원|정성남|최형규|
 |:---:|:---:|:---:|:---:|:---:|
-|실행 시간| ms | ms | ms | ms |
+|실행 시간| ms | 790ms | ms | ms |
 
 ### 활주로 건설
 ||김창희|배정원|정성남|최형규|

@@ -80,7 +80,7 @@ void reset() {
 	memset(Map, 0, sizeof(Map));
 }
 
-// 값 입력받기, 0을 N으로 1을 S로 변환
+// 값 입력받기
 void input() {
 	cin >> N >> M >> K;
 	// Map의 시작지점을 150부터

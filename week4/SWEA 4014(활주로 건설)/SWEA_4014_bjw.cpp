@@ -27,8 +27,8 @@ cur_updown
 높이값 차이가 1보다 클 경우 활주로 건설 불가능
 
 높이 변할 시 cur_updown 갱신 및 통과 여부 체크
-높이가 올라가면 cur_updown=1
-높이가 내려가면 cur_updown=1
+높이가 올라가면 cur_updown=  1
+높이가 내려가면 cur_updown= -1
 
 
 1. 첫 내리막

@@ -14,6 +14,8 @@ using namespace std;
  */
 
 /* 아이디어
+![image](https://user-images.githubusercontent.com/87963766/222869406-76f0b372-4b3d-48a0-8660-29925648cb3d.png)
+
 벽돌 쏠 곳 고르기
 폭발
 벽돌 내리기
